@@ -33,15 +33,18 @@
  *     (`requirePlatformAdmin`), `app/actions/settings/updateBranding.ts`,
  *     `setActiveOrg` para uma org de que a pessoa não é membro, e — a que
  *     escapou da primeira enumeração — **o rodapé de versão da sidebar**
- *     (`components/shell/VersionFooter.tsx:22`, `is_owner && update_available`),
- *     que troca um `<p>` por um `<Link>` "Nova versão" e aparece em TODA tela de
+ *     (`components/shell/VersionFooter.tsx`, `is_owner`), que troca um `<p>`
+ *     por um `<Link>` para a tela de atualização (com "Nova versão" quando há
+ *     versão nova) e aparece em TODA tela de
  *     `/app/*`. Ele fica dentro do `<aside>` (`Sidebar.tsx:187`) mas FORA do
  *     `<nav>` (que fecha em `:168`), então nenhuma asserção escopada em
  *     `role=navigation` o vê — mas ele muda a ALTURA disponível para o `<nav>`,
  *     que é `flex-1`, e `navegacao.spec.ts` tem uma asserção geométrica
- *     (`m.rola`) sensível a isso. As duas metades do gatilho eram armadas pelo
- *     MESMO arquivo: `system-update.spec.ts` promovia o usuário E gravava
- *     `latest_version` no banco que ninguém reseta entre as partes do job.
+ *     (`m.rola`) sensível a isso. Até o PR #2370 o gatilho tinha duas metades,
+ *     armadas pelo MESMO arquivo: `system-update.spec.ts` promovia o usuário E
+ *     gravava `latest_version` no banco que ninguém reseta entre as partes do
+ *     job. Desde o #2370 basta a PROMOÇÃO: o dono vê o `<Link>` com ou sem
+ *     versão nova, então o banco deixou de ser metade do gatilho.
  *
  * Conclusão honesta: hoje a contaminação é uma **mina**, não um falso-verde em
  * curso. Medido com
