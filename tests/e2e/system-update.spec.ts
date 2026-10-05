@@ -526,6 +526,12 @@ test("instalação à frente da versão publicada não vira tela quebrada nem al
   await page.goto("/app/inbox");
   await expect(page.getByRole("link", { name: /nova versão/i })).toHaveCount(0);
   await expect(page.getByText("versão abc1234")).toBeVisible();
+  // Sem versão nova o rodapé não alarma, mas segue sendo a PORTA da tela de
+  // atualização para o dono (#2370): sem ele, a tela só se alcança pela URL.
+  await expect(page.getByRole("link", { name: "versão abc1234" })).toHaveAttribute(
+    "href",
+    "/app/settings/atualizacao",
+  );
 
   await page.goto("/app/settings/atualizacao");
   await expect(
